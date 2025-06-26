@@ -9,6 +9,7 @@
   "prettier.useTabs": false,
   "prettier.semi": true,
   "prettier.singleQuote": false,
+  "prettier.printWidth": 60,
   "prettier.jsxSingleQuote": false,
   "prettier.trailingComma": "es5",
   "prettier.arrowParens": "always",
@@ -24,5 +25,10 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "next-env.d.ts": true
+  }
 }
