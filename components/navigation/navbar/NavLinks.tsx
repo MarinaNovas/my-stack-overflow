@@ -9,7 +9,7 @@ import { sidebarLinks } from "@/constans";
 import { cn } from "@/lib/utils";
 
 interface INavLinks {
-  isMobileNav: boolean;
+  isMobileNav?: boolean;
 }
 
 const NavLinks = ({ isMobileNav = false }: INavLinks) => {
