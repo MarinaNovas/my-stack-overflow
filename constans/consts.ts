@@ -10,3 +10,6 @@ export enum EFormType {
 }
 
 export type TFormType = `${EFormType}`;
+
+export const EMPTY_CHAR = "";
+export const BLANK_CHAR = "-";

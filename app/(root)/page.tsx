@@ -1,7 +1,9 @@
 import Link from "next/link";
 
+import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
+import { EMPTY_CHAR } from "@/constans/consts";
 import ROUTES from "@/constans/routes";
 
 const questions = [
@@ -11,7 +13,7 @@ const questions = [
     description: "I want to learn React, can anyone help me?",
     tags: [
       { _id: "1", name: "React" },
-      { _id: "2", name: "JavaScript" },
+      { _id: "2", name: "React" },
     ],
     author: { _id: "1", name: "John Doe" },
     upvotes: 10,
@@ -24,7 +26,7 @@ const questions = [
     title: "How to learn JavaScript?",
     description: "I want to learn JavaScript, can anyone help me?",
     tags: [
-      { _id: "1", name: "React" },
+      { _id: "1", name: "JavaScript" },
       { _id: "2", name: "JavaScript" },
     ],
     author: { _id: "1", name: "John Doe" },
@@ -39,10 +41,13 @@ interface ISearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: ISearchParams) => {
-  const { query = "" } = await searchParams;
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLocaleLowerCase().includes(query?.toLowerCase())
-  );
+  const { query = EMPTY_CHAR, filter = EMPTY_CHAR } = await searchParams;
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());
+    const matchesFilter = filter ? question.tags[0].name.toLowerCase() === filter.toLowerCase() : true;
+    return matchesQuery && matchesFilter;
+  });
+
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -51,10 +56,10 @@ const Home = async ({ searchParams }: ISearchParams) => {
           <Link href={ROUTES.ASK_QUESTION}>Ask a Qestion</Link>
         </Button>
       </section>
-      <section className="mt-1">
+      <section className="mt-10">
         <LocalSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
       </section>
-      Home Filter
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
           <h1 key={question._id}>{question.title}</h1>

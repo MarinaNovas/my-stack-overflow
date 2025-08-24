@@ -3,6 +3,7 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+import { EMPTY_CHAR } from "@/constans/consts";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
 
 import { Input } from "../ui/input";
@@ -17,7 +18,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: ILocalSearch)
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const query = searchParams.get("query") || "";
+  const query = searchParams.get("query") || EMPTY_CHAR;
   const [searchQuery, setSearchQuery] = useState(query);
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
