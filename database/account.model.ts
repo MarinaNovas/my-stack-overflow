@@ -10,7 +10,7 @@ export interface IAccount {
 }
 const AccountSchema = new Schema(
   {
-    userId: { type: Types.ObjectId, ref: "User", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
     image: { type: String },
     password: { type: String, required: true },
@@ -20,5 +20,5 @@ const AccountSchema = new Schema(
   { timestamps: true }
 );
 
-const Account = models?.account || model<IAccount>("Account", AccountSchema);
+const Account = models?.Account || model<IAccount>("Account", AccountSchema);
 export default Account;
