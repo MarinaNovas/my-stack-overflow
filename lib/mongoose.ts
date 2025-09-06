@@ -38,7 +38,7 @@ if (!cached) {
  * без необходимости повторно устанавливать соединение при каждом вызове server actions.
  */
 
-const dbConnect = async (): Promise<Mongoose> => {
+const dbConnect = async (): Promise<Mongoose | null> => {
   if (cached.conn) {
     return cached.conn;
   }
