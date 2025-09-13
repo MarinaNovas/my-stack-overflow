@@ -6,6 +6,8 @@ import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { EMPTY_CHAR } from "@/constans/consts";
 import ROUTES from "@/constans/routes";
+import handlerError from "@/lib/handlers/error";
+import { NotFoundError } from "@/lib/http-errors";
 
 const questions = [
   {
@@ -48,10 +50,21 @@ const questions = [
   },
 ];
 
+const test = async () => {
+  try {
+    throw new NotFoundError("Test error");
+  } catch (error) {
+    return handlerError(error);
+  }
+};
+
 interface ISearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: ISearchParams) => {
+  const result = await test();
+  console.log(result);
+  console.log("test");
   const { query = EMPTY_CHAR, filter = EMPTY_CHAR } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());
