@@ -10,7 +10,7 @@
     "preinstall": "npx npm-force-resolutions"
   },
   "resolutions": {
-    "eslint": "^9.29.0"
+    "eslint": "9.29.0"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -32,6 +32,8 @@
     "next": "15.3.4",
     "next-auth": "^5.0.0-beta.29",
     "next-themes": "^0.4.6",
+    "pino": "^9.5.0",
+    "pino-pretty": "^13.0.0",
     "prettier": "^3.5.3",
     "query-string": "^9.2.2",
     "react": "^19.0.0",
