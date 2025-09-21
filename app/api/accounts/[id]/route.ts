@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 
 import Account from "@/database/account.model";
-import User from "@/database/user.model";
 import handlerError from "@/lib/handlers/error";
 import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
-import { AccountSchema, UserSchema } from "@/lib/validation";
+import { AccountSchema } from "@/lib/validation";
 
 // GET /api/accounts/[id]
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
