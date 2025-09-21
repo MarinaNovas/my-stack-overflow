@@ -13,3 +13,10 @@ export type TFormType = `${EFormType}`;
 
 export const EMPTY_CHAR = "";
 export const BLANK_CHAR = "-";
+
+export enum EHttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
+}

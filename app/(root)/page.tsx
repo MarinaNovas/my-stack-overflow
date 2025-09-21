@@ -6,6 +6,7 @@ import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { EMPTY_CHAR } from "@/constans/consts";
 import ROUTES from "@/constans/routes";
+import { api } from "@/lib/api";
 import handlerError from "@/lib/handlers/error";
 import dbConnect from "@/lib/mongoose";
 
@@ -52,7 +53,7 @@ const questions = [
 
 const test = async () => {
   try {
-    await dbConnect();
+    return await api.users.getAll();
   } catch (error) {
     return handlerError(error);
   }
@@ -62,7 +63,8 @@ interface ISearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: ISearchParams) => {
-  await test();
+  const users = await test();
+  console.log("users", users);
   const { query = EMPTY_CHAR, filter = EMPTY_CHAR } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());
