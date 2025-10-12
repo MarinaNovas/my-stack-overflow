@@ -22,7 +22,7 @@ const AuthForm = <T extends z.ZodType<any, any, any>>({
   schema,
   formType,
   defaultValues,
-  onSubmit,
+  // onSubmit,
 }: IAuthFormProps<T>) => {
   // 1. Define your form.
   const form = useForm<z.input<T>, any, z.output<T>>({

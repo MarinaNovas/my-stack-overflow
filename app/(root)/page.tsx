@@ -8,7 +8,6 @@ import { EMPTY_CHAR } from "@/constans/consts";
 import ROUTES from "@/constans/routes";
 import { api } from "@/lib/api";
 import handlerError from "@/lib/handlers/error";
-import dbConnect from "@/lib/mongoose";
 
 const questions = [
   {
