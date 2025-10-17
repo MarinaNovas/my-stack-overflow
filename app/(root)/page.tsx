@@ -52,7 +52,6 @@ interface ISearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: ISearchParams) => {
-  console.log("test1");
   const session = await auth();
   console.log("Session:", session);
   const { query = EMPTY_CHAR, filter = EMPTY_CHAR } = await searchParams;
