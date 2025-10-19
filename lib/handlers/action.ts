@@ -32,17 +32,16 @@ async function action<T>({ params, schema, authorize = false }: ActionOptions<T>
     }
   }
   let session: Session | null = null;
-
   if (authorize) {
     session = await auth();
 
     if (!session) {
       return new UnauthorizedError();
     }
-    await dbConnect();
-
-    return { params, session };
   }
+  await dbConnect();
+
+  return { params, session };
 }
 
 export default action;

@@ -2,7 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Control, DefaultValues, Path, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { input, z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -22,22 +24,35 @@ const AuthForm = <T extends z.ZodType<any, any, any>>({
   schema,
   formType,
   defaultValues,
-  // onSubmit,
+  onSubmit,
 }: IAuthFormProps<T>) => {
   // 1. Define your form.
+  const router = useRouter();
   const form = useForm<z.input<T>, any, z.output<T>>({
     resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const handleSubmit = async () => {
-    // TODO: Authentication
+  const handlerSubmit = async (data: z.output<T>) => {
+    const result = (await onSubmit(data)) as ActionResponse;
+
+    if (result?.success) {
+      toast.success("Success", {
+        description: formType === "SIGN_IN" ? "Signed in successfully" : "Signed up successfully",
+      });
+
+      router.push(ROUTES.HOME);
+    } else {
+      toast.success(`Error ${result?.status}`, {
+        description: result?.error?.message,
+      });
+    }
   };
   const buttonText = formType === EFormType.SIGN_IN ? "Sign In" : "Sign Up";
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 space-y-6">
+      <form onSubmit={form.handleSubmit(handlerSubmit)} className="mt-10 space-y-6">
         {Object.keys(defaultValues).map((field) => (
           <FormField
             key={field}
