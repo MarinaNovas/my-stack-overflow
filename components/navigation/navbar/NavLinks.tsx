@@ -10,11 +10,12 @@ import { cn } from "@/lib/utils";
 
 interface INavLinks {
   isMobileNav?: boolean;
+  userId?: string;
 }
 
-const NavLinks = ({ isMobileNav = false }: INavLinks) => {
+const NavLinks = ({ isMobileNav = false, userId }: INavLinks) => {
   const pathname = usePathname();
-  const userId = 1;
+  console.log(userId);
   return (
     <>
       {sidebarLinks.map((item) => {
