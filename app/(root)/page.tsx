@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
@@ -52,8 +51,6 @@ interface ISearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: ISearchParams) => {
-  const session = await auth();
-  console.log("Session:", session);
   const { query = EMPTY_CHAR, filter = EMPTY_CHAR } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());

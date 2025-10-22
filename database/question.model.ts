@@ -16,7 +16,7 @@ export interface IQuestionDoc extends IQuestion, Document {}
 const QuestionSchema = new Schema(
   {
     title: { type: String, required: true },
-    contetnt: { type: String, required: true },
+    content: { type: String, required: true },
     tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
     views: { type: Number, default: 0 },
     upvotes: { type: Number, default: 0 },
@@ -27,5 +27,5 @@ const QuestionSchema = new Schema(
   { timestamps: true }
 );
 
-const Question = models?.Question || model<IQuestion>("Account", QuestionSchema);
+const Question = models?.Question || model<IQuestion>("Question", QuestionSchema);
 export default Question;

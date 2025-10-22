@@ -15,21 +15,17 @@ interface INavLinks {
 
 const NavLinks = ({ isMobileNav = false, userId }: INavLinks) => {
   const pathname = usePathname();
-  console.log(userId);
   return (
     <>
       {sidebarLinks.map((item) => {
-        const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
-        if (item.route === "/profile") {
-          if (userId) {
-            item.route = `${item.route}/${userId}`;
-          } else {
-            return null;
-          }
-        }
+        const route = item.route === "/profile" ? (userId ? `/profile/${userId}` : null) : item.route;
+
+        if (!route) return null;
+        const isActive = (pathname.includes(route) && route.length > 1) || pathname === route;
+
         const LinkComponent = (
           <Link
-            href={item.route}
+            href={route}
             key={item.label}
             className={cn(
               isActive ? "primary-gradient rounded-lg text-light-900" : "text-dark300_light900",
@@ -47,11 +43,11 @@ const NavLinks = ({ isMobileNav = false, userId }: INavLinks) => {
           </Link>
         );
         return isMobileNav ? (
-          <SheetClose asChild key={item.route}>
+          <SheetClose asChild key={route}>
             {LinkComponent}
           </SheetClose>
         ) : (
-          <React.Fragment key={item.route}>{LinkComponent}</React.Fragment>
+          <React.Fragment key={route}>{LinkComponent}</React.Fragment>
         );
       })}
     </>
