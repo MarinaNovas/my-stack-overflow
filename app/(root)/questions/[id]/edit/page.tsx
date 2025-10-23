@@ -8,9 +8,6 @@ import { getQuestion } from "@/lib/actions/question.action";
 
 const EditQuetion = async ({ params }: RouteParams) => {
   const { id } = await params;
-  console.log("params");
-  console.log(id);
-  console.log(params);
   if (!id) return notFound();
 
   const session = await auth();
