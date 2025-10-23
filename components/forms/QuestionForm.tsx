@@ -12,7 +12,7 @@ import z from "zod";
 
 import { EMPTY_CHAR } from "@/constans/consts";
 import ROUTES from "@/constans/routes";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validation";
 
 import TagCard from "../cards/TagCard";
@@ -25,7 +25,12 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const QuestionForm = () => {
+interface IParams {
+  question?: IQuestion;
+  isEdit?: boolean;
+}
+
+const QuestionForm = ({ question, isEdit }: IParams) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTrasition] = useTransition();
@@ -34,9 +39,9 @@ const QuestionForm = () => {
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: EMPTY_CHAR,
-      content: EMPTY_CHAR,
-      tags: [],
+      title: question?.title || EMPTY_CHAR,
+      content: question?.content || EMPTY_CHAR,
+      tags: question?.tags.map((tag) => tag.name) || [],
     },
   });
 
@@ -67,6 +72,22 @@ const QuestionForm = () => {
 
   const handlecreateQuestion = async (data: z.infer<typeof AskQuestionSchema>) => {
     startTrasition(async () => {
+      if (isEdit && question) {
+        const result = await editQuestion({ questionId: question._id, ...data });
+
+        if (result.success) {
+          toast.success("Success", {
+            description: "Question updated successfully",
+          });
+
+          if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+        } else {
+          toast.error(`Error ${result.status}`, {
+            description: result.error?.message || "Something went wrong",
+          });
+        }
+        return;
+      }
       const result = await createQuestion(data);
       if (result.success) {
         toast.success("Success", {
@@ -171,7 +192,7 @@ const QuestionForm = () => {
                 <span>Submitting</span>
               </>
             ) : (
-              <>Ask A Question</>
+              <>{isEdit ? "Edit" : "Ask a Question"}</>
             )}
           </Button>
         </div>
