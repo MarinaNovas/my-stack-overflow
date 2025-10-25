@@ -29,8 +29,8 @@ const QuestionCard = (question: IQuestionCardProps) => {
       </div>
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
-          imgUrl={author.image}
-          alt={author.name}
+          imgUrl={author.image?.trim() || "/icons/user.svg"}
+          alt={author.name || "author name"}
           value={author.name}
           title={`• asked ${getTimeStamp(createdAt)}`}
           href={ROUTES.PROFILE(author._id)}

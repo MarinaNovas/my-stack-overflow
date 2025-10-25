@@ -34,8 +34,6 @@ const QuestionForm = ({ question, isEdit }: IParams) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTrasition] = useTransition();
-  console.log("isPending");
-  console.log(isPending);
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {

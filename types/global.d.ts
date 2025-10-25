@@ -46,3 +46,11 @@ interface RouteParams {
  params: /questions/[id] - Параметры, к которым можно получить доступ, задав вопрос с косой чертой, открывают доступ к динамическому параметру ID, 
 searchParams: /questions?tag=javascript  параметры поиска указываются после вопросительного знака там, где вы указываете пару «ключ-значение», например tag, равен JavaScript.
 **/
+
+interface IPaginatedSearchParams {
+  page?: number;
+  pageSize?: number;
+  query?: string;
+  filter?: string;
+  sort?: string;
+}
