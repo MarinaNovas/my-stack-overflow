@@ -54,3 +54,11 @@ interface IPaginatedSearchParams {
   filter?: string;
   sort?: string;
 }
+
+interface PaginatedSearchParams {
+  page?: number;
+  pageSize?: number;
+  query?: string;
+  filter?: string;
+  sort?: string;
+}
