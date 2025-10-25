@@ -13,8 +13,9 @@ interface ILocalSearch {
   imgSrc: string;
   placeholder: string;
   otherClasses?: string;
+  iconPosition?: "left" | "right";
 }
-const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: ILocalSearch) => {
+const LocalSearch = ({ route, imgSrc, placeholder, otherClasses, iconPosition = "left" }: ILocalSearch) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -39,7 +40,8 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: ILocalSearch)
     <div
       className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
     >
-      <Image src={imgSrc} alt="Search" width={24} height={24} className="cursor-pointer" />
+      {iconPosition === "left" && <Image src={imgSrc} alt="Search" width={24} height={24} className="cursor-pointer" />}
+
       <Input
         type="text"
         placeholder={placeholder}
@@ -49,6 +51,9 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: ILocalSearch)
         }}
         className="paragraph-regular no-focus placeholder text-dark400_light700 border-none outline-none shadow-none"
       />
+      {iconPosition === "right" && (
+        <Image src={imgSrc} alt="Search" width={15} height={15} className="cursor-pointer" />
+      )}
     </div>
   );
 };
