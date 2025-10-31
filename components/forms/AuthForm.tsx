@@ -43,7 +43,7 @@ const AuthForm = <T extends z.ZodType<any, any, any>>({
 
       router.push(ROUTES.HOME);
     } else {
-      toast.success(`Error ${result?.status}`, {
+      toast.error(`Error ${result?.status}`, {
         description: result?.error?.message,
       });
     }
