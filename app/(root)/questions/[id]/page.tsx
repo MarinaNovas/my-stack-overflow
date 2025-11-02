@@ -2,8 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import React from "react";
-import { success } from "zod";
-import { id } from "zod/v4/locales";
 
 import TagCard from "@/components/cards/TagCard";
 import { Preview } from "@/components/editor/Preview";
@@ -12,6 +10,7 @@ import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constans/routes";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+import AnswerForm from "@/components/forms/AnswerForm";
 
 // import View from "../view";
 
@@ -86,6 +85,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           <TagCard key={tag._id} _id={tag._id as string} name={tag.name} compact />
         ))}
       </div>
+      <section className="my-5">
+        <AnswerForm />
+      </section>
     </>
   );
 };
