@@ -5,12 +5,12 @@ import React from "react";
 
 import TagCard from "@/components/cards/TagCard";
 import { Preview } from "@/components/editor/Preview";
+import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constans/routes";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
-import AnswerForm from "@/components/forms/AnswerForm";
 
 // import View from "../view";
 
@@ -86,7 +86,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         ))}
       </div>
       <section className="my-5">
-        <AnswerForm />
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   );

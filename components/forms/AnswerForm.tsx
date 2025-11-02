@@ -5,20 +5,22 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validation";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -31,7 +33,23 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log(values);
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+
+      if (result.success) {
+        form.reset();
+        toast.success("Success", {
+          description: "Your answer has been posted successfully",
+        });
+      } else {
+        toast.error(`Error ${result?.status}`, {
+          description: result?.error?.message,
+        });
+      }
+    });
   };
 
   return (
@@ -78,7 +96,7 @@ const AnswerForm = () => {
 
           <div className="flex justify-end">
             <Button type="submit" className="primary-gradient w-fit">
-              {isSubmitting ? (
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
                   Posting...
