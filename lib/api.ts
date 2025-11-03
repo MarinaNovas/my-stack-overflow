@@ -52,4 +52,11 @@ export const api = {
       }),
     delete: (id: string) => fetchHandler(`${API_BASE_URL}/accounts/${id}`, { method: EHttpMethod.DELETE }),
   },
+  ai: {
+    getAnswer: (question: string, content: string): APIResponse<string> =>
+      fetchHandler(`${API_BASE_URL}/ai/answers`, {
+        method: "POST",
+        body: JSON.stringify({ question, content }),
+      }),
+  },
 };
