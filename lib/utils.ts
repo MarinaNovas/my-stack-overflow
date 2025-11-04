@@ -71,6 +71,6 @@ export const formatNumber = (number: number) => {
   } else if (number >= 1000) {
     return (number / 1000).toFixed(1) + "K";
   } else {
-    return number.toString();
+    return number?.toString();
   }
 };
