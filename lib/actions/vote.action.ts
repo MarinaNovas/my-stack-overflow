@@ -1,7 +1,9 @@
 "use server";
 
 import mongoose, { ClientSession } from "mongoose";
+import { revalidatePath } from "next/cache";
 
+import ROUTES from "@/constans/routes";
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import Vote from "@/database/vote.model";
@@ -74,14 +76,26 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
       }
     } else {
       // If the user has not voted yet, create a new vote
-      await Vote.create([{ targetId, targetType, voteType, change: 1 }], {
-        session,
-      });
+      await Vote.create(
+        [
+          {
+            author: userId,
+            actionId: targetId,
+            actionType: targetType,
+            voteType,
+          },
+        ],
+        {
+          session,
+        }
+      );
       await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session);
     }
 
     await session.commitTransaction();
     session.endSession();
+
+    revalidatePath(ROUTES.QUESTION(targetId));
 
     return { success: true };
   } catch (error) {
@@ -112,14 +126,12 @@ export async function hasVoted(params: HasVotedParams): Promise<ActionResponse<H
       actionType: targetType,
     });
 
-    if (!vote)
+    if (!vote) {
       return {
         success: false,
-        data: {
-          hasUpvoted: false,
-          hasDownvoted: false,
-        },
+        data: { hasUpvoted: false, hasDownvoted: false },
       };
+    }
 
     return {
       success: true,

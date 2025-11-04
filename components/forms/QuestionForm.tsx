@@ -47,7 +47,6 @@ const QuestionForm = ({ question, isEdit }: IParams) => {
     if (e.key === "Enter") {
       e.preventDefault();
       const tagInput = e.currentTarget.value.trim();
-      console.log(tagInput);
       if (tagInput && tagInput.length < 15 && !field.value.includes(tagInput)) {
         form.setValue("tags", [...field.value, tagInput]);
         e.currentTarget.value = "";
