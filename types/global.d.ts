@@ -16,6 +16,7 @@ interface IQuestion {
   tags: ITag[];
   author: IAuthor;
   upvotes: number;
+  downvotes: number;
   answers: number;
   views: number;
   createdAt: Date;
