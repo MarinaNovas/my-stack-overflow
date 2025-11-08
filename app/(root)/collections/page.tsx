@@ -4,8 +4,10 @@ import React from "react";
 import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
+import CommonFilter from "@/components/filters/CommonFilter";
 import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
+import { CollectionFilters } from "@/constans/filter";
 import ROUTES from "@/constans/routes";
 import { EMPTY_QUESTION } from "@/constans/state";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
@@ -43,6 +45,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
           placeholder="Search questions..."
           otherClasses="flex-1"
         />
+        <CommonFilter filters={CollectionFilters} otherClasses="min-h-[56px] sm:min-w-[170px]" />
       </div>
 
       <DataRenderer

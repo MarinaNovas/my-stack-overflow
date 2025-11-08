@@ -22,8 +22,9 @@ import page from "../../page";
 
 // import View from "../view";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
+  const { page, pageSize, filter } = await searchParams;
   /* const [_, { success, data: question }] = await Promise.all([
     await incrementViews({ questionId: id }),
     await getQuestion({ questionId: id }),
@@ -42,8 +43,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   } = await getAnswers({
     questionId: id,
     page: Number(page) || 1,
-    pageSize: 10,
-    filter: "latest",
+    pageSize: Number(pageSize) || 10,
+    filter,
   });
 
   const hasVotedPromise = hasVoted({
