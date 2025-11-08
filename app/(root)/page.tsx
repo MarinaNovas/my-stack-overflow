@@ -2,10 +2,12 @@ import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
+import CommonFilter from "@/components/filters/CommonFilter";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { EMPTY_CHAR } from "@/constans/consts";
+import { HomePageFilters } from "@/constans/filter";
 import ROUTES from "@/constans/routes";
 import { EMPTY_QUESTION } from "@/constans/state";
 import { getQuestions } from "@/lib/actions/question.action";
@@ -32,8 +34,13 @@ const Home = async ({ searchParams }: ISearchParams) => {
           <Link href={ROUTES.ASK_QUESTION}>Ask a Qestion</Link>
         </Button>
       </section>
-      <section className="mt-10">
+      <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
+        <CommonFilter
+          filters={HomePageFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+          containerClasses="hidden max-md:flex"
+        />
       </section>
       <HomeFilter />
       <DataRenderer
