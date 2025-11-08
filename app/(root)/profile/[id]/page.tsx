@@ -5,7 +5,6 @@ import React from "react";
 
 import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
-import TagCard from "@/components/cards/TagCard";
 import DataRenderer from "@/components/DataRenderer";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
@@ -13,13 +12,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
-import { EMPTY_QUESTION, EMPTY_ANSWERS, EMPTY_TAGS } from "@/constans/state";
+import { EMPTY_QUESTION } from "@/constans/state";
 import { getUser, getUserAnswers, getUserQuestions, getUserStats, getUserTopTags } from "@/lib/actions/user.action";
 
-import AnswerCard from "@/components/cards/AnswerCard";
-
 const Profile = async ({ params, searchParams }: RouteParams) => {
+  // /12312313
   const { id } = await params;
+  // ?id=1&page=1&pageSize=10
   const { page, pageSize } = await searchParams;
 
   if (!id) notFound();
@@ -114,7 +113,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         totalQuestions={userStats?.totalQuestions || 0}
         totalAnswers={userStats?.totalAnswers || 0}
         badges={userStats?.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
-        // reputationPoints={user.reputation || 0}
+        reputationPoints={user.reputation || 0}
       />
 
       <section className="mt-10 flex gap-10">
@@ -127,72 +126,32 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               Answers
             </TabsTrigger>
           </TabsList>
-
           <TabsContent value="top-posts" className="mt-5 flex w-full flex-col gap-6">
             <DataRenderer
-              success={userQuestionsSuccess}
-              error={userQuestionsError}
               data={questions}
               empty={EMPTY_QUESTION}
-              render={(questions) => (
+              success={userQuestionsSuccess}
+              error={userQuestionsError}
+              render={(hotQuestions) => (
                 <div className="flex w-full flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard
-                      key={question._id}
-                      question={question}
-                      showActionBtns={loggedInUser?.user?.id === question.author._id}
-                    />
+                    <QuestionCard key={question._id} question={question} />
                   ))}
                 </div>
               )}
             />
 
-            <Pagination page={page} isNext={hasMoreQuestions || false} />
+            <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
-
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
-            <DataRenderer
-              success={userAnswersSuccess}
-              error={userAnswersError}
-              data={answers}
-              empty={EMPTY_ANSWERS}
-              render={(answers) => (
-                <div className="flex w-full flex-col gap-10">
-                  {answers.map((answer) => (
-                    <AnswerCard
-                      key={answer._id}
-                      {...answer}
-                      content={answer.content.slice(0, 270)}
-                      containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
-                      showReadMore
-                      showActionBtns={loggedInUser?.user?.id === answer.author._id}
-                    />
-                  ))}
-                </div>
-              )}
-            />
-
-            <Pagination page={page} isNext={hasMoreAnswers || false} />
+            List of Answers
           </TabsContent>
         </Tabs>
 
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
-          <h3 className="h3-bold text-dark200_light900">Top Tags</h3>
-
+          <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
-            <DataRenderer
-              success={userTopTagsSuccess}
-              error={userTopTagsError}
-              data={tags}
-              empty={EMPTY_TAGS}
-              render={(tags) => (
-                <div className="mt-3 flex w-full flex-col gap-4">
-                  {tags.map((tag) => (
-                    <TagCard key={tag._id} _id={tag._id} name={tag.name} questions={tag.count} showCount compact />
-                  ))}
-                </div>
-              )}
-            />
+            <p>List of Tags</p>
           </div>
         </div>
       </section>

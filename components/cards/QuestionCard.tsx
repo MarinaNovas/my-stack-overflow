@@ -9,8 +9,9 @@ import Metric from "../Metric";
 
 interface IQuestionCardProps {
   question: IQuestion;
+  showActionBtns?: boolean;
 }
-const QuestionCard = (question: IQuestionCardProps) => {
+const QuestionCard = (question: IQuestionCardProps, showActionBtns = false) => {
   const { _id, title, tags, author, createdAt, upvotes, answers, views } = question.question || {};
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
