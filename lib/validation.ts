@@ -169,3 +169,38 @@ export const CollectionBaseSchema = z.object({
 export const GetUserSchema = z.object({
   userId: z.string().min(1, { message: "User ID is required." }),
 });
+
+export const GetUserQuestionsSchema = PaginatedSearchParamsSchema.extend({
+  userId: z.string().min(1, "User ID is required"),
+});
+
+export const GetUsersAnswersSchema = PaginatedSearchParamsSchema.extend({
+  userId: z.string().min(1, "User ID is required"),
+});
+
+export const GetUserTagsSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+});
+
+export const DeleteQuestionSchema = z.object({
+  questionId: z.string().min(1, "Question ID is required"),
+});
+
+export const DeleteAnswerSchema = z.object({
+  answerId: z.string().min(1, "Answer ID is required"),
+});
+
+export const UpdateUserSchema = z.object({
+  name: z
+    .string()
+    .min(3, {
+      message: "Name must be at least 3 characters.",
+    })
+    .max(130, { message: "Name musn't be longer then 130 characters." }),
+  username: z.string().min(3, { message: "username musn't be longer then 100 characters." }),
+  portfolio: z.string().url({ message: "Please provide valid URL" }),
+  location: z.string().min(3, { message: "Please provide proper location" }),
+  bio: z.string().min(3, {
+    message: "Bio must be at least 3 characters.",
+  }),
+});
