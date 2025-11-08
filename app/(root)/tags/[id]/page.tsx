@@ -6,6 +6,7 @@ import LocalSearch from "@/components/search/LocalSearch";
 import ROUTES from "@/constans/routes";
 import { EMPTY_QUESTION } from "@/constans/state";
 import { getTagQuestions } from "@/lib/actions/tag.actions";
+import Pagination from "@/components/Pagination";
 
 const Page = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
@@ -17,7 +18,7 @@ const Page = async ({ params, searchParams }: RouteParams) => {
     query,
   });
 
-  const { tag, questions } = data || {};
+  const { tag, questions, isNext } = data || {};
 
   return (
     <>
@@ -47,6 +48,7 @@ const Page = async ({ params, searchParams }: RouteParams) => {
           </div>
         )}
       />
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };
