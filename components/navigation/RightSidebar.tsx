@@ -11,8 +11,8 @@ import TagCard from "../cards/TagCard";
 import DataRenderer from "../DataRenderer";
 
 const RightSidebar = async () => {
-  const { success, data: hotQuestions, error } = await getHotQuestions();
-  const { success: tagSuccess, data: tags, error: tagError } = await getTopTags();
+  const [{ success, data: hotQuestions, error }, { success: tagSuccess, data: tags, error: tagError }] =
+    await Promise.all([getHotQuestions(), getTopTags()]);
 
   return (
     <section className="flex flex-col gap-6 custom-scroll overflow-y-auto h-screen w-[350px] px-6 pt-36 pb-6 max-xl:hidden background-light900_dark200 light-border sticky top-0 right-0 border-l">
