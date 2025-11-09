@@ -6,22 +6,24 @@ import { getTimeStamp } from "@/lib/utils";
 
 import TagCard from "./TagCard";
 import Metric from "../Metric";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 interface IQuestionCardProps {
   question: IQuestion;
   showActionBtns?: boolean;
 }
-const QuestionCard = (question: IQuestionCardProps, showActionBtns = false) => {
-  const { _id, title, tags, author, createdAt, upvotes, answers, views } = question.question || {};
+const QuestionCard = ({ question, showActionBtns = false }: IQuestionCardProps) => {
+  const { _id, title, tags, author, createdAt, upvotes, answers, views } = question || {};
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
-      <div className="flex flex-col-reverse justify-between gap-5 sm:flex-row">
-        <div>
+      <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row">
+        <div className="flex-1">
           <span className="sm: hidden">{getTimeStamp(createdAt)}</span>
           <Link href={ROUTES.QUESTION(_id)}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">{title}</h3>
           </Link>
         </div>
+        {showActionBtns && <EditDeleteAction type="Question" itemId={_id} />}
       </div>
       <div className="mt-3.5 flex w-full flex-wrap gap-2">
         {tags.map((tag: ITag) => (

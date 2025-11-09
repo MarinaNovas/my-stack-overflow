@@ -128,7 +128,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               Answers
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="top-posts" className="mt-5 flex w-full flex-col gap-6">
+          <TabsContent value="top-posts" className="mt-5 hidden w-full flex-col gap-6 data-[state=active]:flex">
             <DataRenderer
               data={questions}
               empty={EMPTY_QUESTION}
@@ -137,21 +137,25 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               render={(questions) => (
                 <div className="flex w-full flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard key={question._id} question={question} />
+                    <QuestionCard
+                      key={question._id}
+                      question={question}
+                      showActionBtns={loggedInUser?.user?.id === question.author._id}
+                    />
                   ))}
                 </div>
               )}
             />
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
-          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+          <TabsContent value="answers" className="hidden w-full flex-col gap-6 data-[state=active]:flex">
             <DataRenderer
               data={answers}
               empty={EMPTY_ANSWERS}
               success={userAnswersSuccess}
               error={userAnswersError}
               render={(answers) => (
-                <div className="flex w-full flex-col gap-6">
+                <div className="flex w-full flex-col gap-10">
                   {answers.map((answer) => (
                     <AnswerCard
                       key={answer._id}
@@ -159,6 +163,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                       content={answer.content.slice(0, 27)}
                       containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
                       showReadMore
+                      showActionBtns={loggedInUser?.user?.id === answer.author._id}
                     />
                   ))}
                 </div>

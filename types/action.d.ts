@@ -91,3 +91,7 @@ interface UpdateUserParams {
   image?: string;
   password?: string;
 }
+
+interface DeleteQuestionParams {
+  questionId: string;
+}
