@@ -6,6 +6,7 @@ import React from "react";
 import { auth } from "@/auth";
 import AnswerCard from "@/components/cards/AnswerCard";
 import QuestionCard from "@/components/cards/QuestionCard";
+import TagCard from "@/components/cards/TagCard";
 import DataRenderer from "@/components/DataRenderer";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
-import { EMPTY_ANSWERS, EMPTY_QUESTION } from "@/constans/state";
+import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constans/state";
 import { getUser, getUserAnswers, getUserQuestions, getUserStats, getUserTopTags } from "@/lib/actions/user.action";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
@@ -141,7 +142,6 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                 </div>
               )}
             />
-
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
@@ -172,7 +172,19 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
-            <p>List of Tags</p>
+            <DataRenderer
+              data={tags}
+              empty={EMPTY_TAGS}
+              success={userTopTagsSuccess}
+              error={userTopTagsError}
+              render={(tags) => (
+                <div className="mt-3 flex w-full flex-col gap-4">
+                  {tags.map((tag) => (
+                    <TagCard key={tag._id} _id={tag._id} name={tag.name} questions={tag.count} showCount compact />
+                  ))}
+                </div>
+              )}
+            />
           </div>
         </div>
       </section>
