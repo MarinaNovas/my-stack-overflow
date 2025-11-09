@@ -6,10 +6,11 @@ import { revalidatePath } from "next/cache";
 import ROUTES from "@/constans/routes";
 import Answer, { IAnswerDoc } from "@/database/answer.model";
 import Question from "@/database/question.model";
+import Vote from "@/database/vote.model";
 
 import action from "../handlers/action";
-import handleError from "../handlers/error";
-import { AnswerServerSchema, GetAnswersSchema } from "../validation";
+import handlerError from "../handlers/error";
+import { AnswerServerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validation";
 
 export async function createAnswer(params: CreateAnswerParams): Promise<ActionResponse<IAnswerDoc>> {
   const validationResult = await action({
@@ -19,7 +20,7 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
   });
 
   if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse;
+    return handlerError(validationResult) as ErrorResponse;
   }
 
   const { content, questionId } = validationResult.params!;
@@ -59,7 +60,7 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
     };
   } catch (error) {
     await session.abortTransaction();
-    return handleError(error) as ErrorResponse;
+    return handlerError(error) as ErrorResponse;
   } finally {
     await session.endSession();
   }
@@ -78,7 +79,7 @@ export async function getAnswers(params: GetAnswersParams): Promise<
   });
 
   if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse;
+    return handlerError(validationResult) as ErrorResponse;
   }
 
   const { questionId, page = 1, pageSize = 10, filter } = params;
@@ -123,6 +124,43 @@ export async function getAnswers(params: GetAnswersParams): Promise<
       },
     };
   } catch (error) {
-    return handleError(error) as ErrorResponse;
+    return handlerError(error) as ErrorResponse;
+  }
+}
+
+export async function deleteAnswer(params: DeleteAnswerParams): Promise<ActionResponse> {
+  const validationResult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handlerError(validationResult) as ErrorResponse;
+  }
+
+  const { answerId } = validationResult.params!;
+  const { user } = validationResult.session!;
+
+  try {
+    const answer = await Answer.findById(answerId);
+    if (!answer) throw new Error("Answer not found");
+
+    if (answer.author.toString() !== user?.id) throw new Error("You're not allowed to delete this answer");
+
+    // reduce the question answers count
+    await Question.findByIdAndUpdate(answer.question, { $inc: { answers: -1 } }, { new: true });
+
+    // delete votes associated with answer
+    await Vote.deleteMany({ actionId: answerId, actionType: "answer" });
+
+    // delete the answer
+    await Answer.findByIdAndDelete(answerId);
+
+    revalidatePath(`/profile/${user?.id}`);
+
+    return { success: true };
+  } catch (error) {
+    return handlerError(error) as ErrorResponse;
   }
 }

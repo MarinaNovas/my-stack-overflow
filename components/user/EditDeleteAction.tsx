@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
 
 interface Props {
@@ -36,7 +37,7 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
         description: "Your question has been deleted successfully.",
       });
     } else if (type === "Answer") {
-      // Call API to delete answer
+      await deleteAnswer({ answerId: itemId });
       toast.success("Answer deleted", {
         description: "Your answer has been deleted successfully",
       });
