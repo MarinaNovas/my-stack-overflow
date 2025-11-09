@@ -77,7 +77,7 @@ export async function getUsers(
   }
 }
 
-export async function getUser(params: GetUserParams): Promise<
+export async function getUserOld(params: GetUserParams): Promise<
   ActionResponse<{
     user: User;
     totalQuestions: number;
@@ -109,6 +109,37 @@ export async function getUser(params: GetUserParams): Promise<
         user: JSON.parse(JSON.stringify(user)),
         totalQuestions,
         totalAnswers,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUser(params: GetUserParams): Promise<
+  ActionResponse<{
+    user: User;
+  }>
+> {
+  const validationResult = await action({
+    params,
+    schema: GetUserSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { userId } = params;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) throw new Error("User not found");
+
+    return {
+      success: true,
+      data: {
+        user: JSON.parse(JSON.stringify(user)),
       },
     };
   } catch (error) {
@@ -247,11 +278,38 @@ export async function getUserTopTags(
   }
 }
 
+export async function updateUser(params: UpdateUserParams): Promise<ActionResponse<{ user: User }>> {
+  const validationResult = await action({
+    params,
+    schema: UpdateUserSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { user } = validationResult.session!;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(user?.id, params, {
+      new: true,
+    });
+
+    return {
+      success: true,
+      data: { user: JSON.parse(JSON.stringify(updatedUser)) },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
 export async function getUserStats(params: GetUserParams): Promise<
   ActionResponse<{
     totalQuestions: number;
     totalAnswers: number;
-    badges: BadgeCounts;
+    badges: Badges;
   }>
 > {
   const validationResult = await action({
@@ -308,33 +366,6 @@ export async function getUserStats(params: GetUserParams): Promise<
         totalAnswers: answerStats.count,
         badges,
       },
-    };
-  } catch (error) {
-    return handleError(error) as ErrorResponse;
-  }
-}
-
-export async function updateUser(params: UpdateUserParams): Promise<ActionResponse<{ user: User }>> {
-  const validationResult = await action({
-    params,
-    schema: UpdateUserSchema,
-    authorize: true,
-  });
-
-  if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse;
-  }
-
-  const { user } = validationResult.session!;
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(user?.id, params, {
-      new: true,
-    });
-
-    return {
-      success: true,
-      data: { user: JSON.parse(JSON.stringify(updatedUser)) },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
