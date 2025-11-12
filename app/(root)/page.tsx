@@ -17,6 +17,11 @@ import { getQuestions } from "@/lib/actions/question.action";
 export const metadata: Metadata = {
   title: "Dev Overflow | Home",
   description: "Discover different programming questions and answers with recommendations from the community.",
+  icons: {
+    icon: "/icons/favicon.svg", // default favicon for browsers
+    shortcut: "/icons/favicon-shortcut.png", // sometimes used for pinned tabs or bookmarks
+    apple: "/icons/apple-icon.png", // required by iOS when users add your site to their home screen
+  },
 };
 
 interface ISearchParams {
