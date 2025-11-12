@@ -18,18 +18,9 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
-import page from "../../page";
-
-// import View from "../view";
-
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page, pageSize, filter } = await searchParams;
-  /* const [_, { success, data: question }] = await Promise.all([
-    await incrementViews({ questionId: id }),
-    await getQuestion({ questionId: id }),
-  ]); */
-  // await incrementViews({ questionId: id });
   const { success, data: question } = await getQuestion({ questionId: id });
   after(async () => {
     await incrementViews({ questionId: id });
