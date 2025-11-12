@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
@@ -12,6 +13,11 @@ import { HomePageFilters } from "@/constans/filter";
 import ROUTES from "@/constans/routes";
 import { EMPTY_QUESTION } from "@/constans/state";
 import { getQuestions } from "@/lib/actions/question.action";
+
+export const metadata: Metadata = {
+  title: "Dev Overflow | Home",
+  description: "Discover different programming questions and answers with recommendations from the community.",
+};
 
 interface ISearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -36,7 +42,13 @@ const Home = async ({ searchParams }: ISearchParams) => {
         </Button>
       </section>
       <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        <LocalSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
+        <LocalSearch
+          route={ROUTES.HOME}
+          imgSrc="/icons/search.svg"
+          placeholder="Search questions..."
+          otherClasses="flex-1"
+          iconPosition="left"
+        />
         <CommonFilter
           filters={HomePageFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
