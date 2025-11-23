@@ -14,25 +14,13 @@ const eslintConfig = [
   {
     ignores: ["components/ui/**/*"],
   },
-  ...compat.extends(
-    "next/core-web-vitals",
-    "next/typescript",
-    "standard",
-    "prettier"
-  ),
+  ...compat.extends("next/core-web-vitals", "next/typescript", "standard", "prettier"),
   {
     rules: {
       "import/order": [
         "error",
         {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            ["parent", "sibling"],
-            "index",
-            "object",
-          ],
+          groups: ["builtin", "external", "internal", ["parent", "sibling"], "index", "object"],
 
           "newlines-between": "always",
 
@@ -54,6 +42,7 @@ const eslintConfig = [
       ],
       "comma-dangle": "off",
     },
+    ignorePatterns: ["components/ui/**"],
   },
   {
     files: ["**/*.ts", "**/*.tsx"],
