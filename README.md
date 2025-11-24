@@ -53,4 +53,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - TailwindCSS
 - React Hook Form
 
-https://my-stack-overflow.vercel.app/
+Готовый проект можно посмотреть по адресу: https://my-stack-overflow.vercel.app/
